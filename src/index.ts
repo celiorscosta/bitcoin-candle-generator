@@ -27,6 +27,7 @@ const generateCandle = async () => {
             const price = await readMarkedPrice();
             candle.addValue(price);
             console.log(`Marked price: ${price} of ${loopTimes}`);
+            await new Promise(resolve => setTimeout(resolve, Period.TEN_SECONDS));
         }
 
         candle.closeCandle();
