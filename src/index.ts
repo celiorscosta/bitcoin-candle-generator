@@ -11,15 +11,14 @@ config();
 const readMarkedPrice = async (): Promise<number> => {
     const result = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd');
     const data = await result.json();
-    console.log(data);
-    return 1;
+    return (data as any).bitcoin.usd;
 }
 
 const generateCandle = async () => {
     const messageChannel = await createMessageChannel();
     if (messageChannel) {
         while (true) {
-            const loopTimes = Period.ONE_MINUTE / Period.TEN_SECONDS;
+            const loopTimes = Period.THIRTY_SECONDS / Period.TEN_SECONDS;
             const candle = new Candle('BTC', new Date());
 
             console.log('------------------------------------------------------');
@@ -28,7 +27,7 @@ const generateCandle = async () => {
             for (let i = 0; i < loopTimes; i++) {
                 const price = await readMarkedPrice();
                 candle.addValue(price);
-                console.log(`Marked price: ${price} of ${loopTimes}`);
+                console.log(`Marked price: ${i + 1} of ${loopTimes}`);
                 await new Promise(resolve => setTimeout(resolve, Period.THIRTY_SECONDS));
             }
 

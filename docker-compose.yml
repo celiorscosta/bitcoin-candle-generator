@@ -1,8 +1,8 @@
 version: '3.9'
 
 services:
-  rabbit-mq:
-    image: rabbitmq:latest
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
     container_name: 'tutorial-rabbitmq-001'
     environment:
       - RABBITMQ_DEFAULT_USER=admin
