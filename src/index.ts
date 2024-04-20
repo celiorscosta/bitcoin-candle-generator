@@ -1,5 +1,7 @@
 import { config } from 'dotenv';
 import express from 'express';
+import Period from './enums/Period';
+import Candle from './Models/Candle';
 
 const app = express();
 
@@ -12,4 +14,25 @@ const readMarkedPrice = async (): Promise<number> => {
     return 1;
 }
 
-readMarkedPrice();
+const generateCandle = async () => {
+    while (true) {
+        const loopTimes = Period.ONE_MINUTE / Period.TEN_SECONDS;
+
+        const candle = new Candle('BTC', new Date());
+
+        console.log('------------------------------------------------------');
+        console.log('New candle created');
+
+        for (let i = 0; i < loopTimes; i++) {
+            const price = await readMarkedPrice();
+            candle.addValue(price);
+            console.log(`Marked price: ${price} of ${loopTimes}`);
+        }
+
+        candle.closeCandle();
+        console.log('Candle closed');
+        console.log(candle.toSimpleObject());
+    }
+}
+
+generateCandle();
