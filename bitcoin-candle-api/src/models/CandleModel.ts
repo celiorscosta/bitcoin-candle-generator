@@ -13,7 +13,7 @@ export interface ICandle extends Document {
 
 const schema = new Schema<ICandle>({
     currency: { type: String, required: true },
-    finalDateTime: { type: Date, required: true },
+    finalDateTime: { type: Date, required: false },
     open: { type: Number, required: true },
     close: { type: Number, required: true },
     high: { type: Number, required: true },

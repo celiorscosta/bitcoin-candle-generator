@@ -26,7 +26,7 @@ export default class CandleMessageChannel {
 
     private async _createMessageChannel() {
         try {
-            const connection = await connect('amqp://admin@admin@localhost:5672');
+            const connection = await connect('amqp://admin:admin@localhost:5672');
             this._channel = await connection.createChannel();
             this._channel.assertQueue('candles');
         } catch (error) {
@@ -46,8 +46,9 @@ export default class CandleMessageChannel {
 
                 const candle: ICandle = candleObj;
                 await this._candleCtrl.save(candle);
-                console.log('Candle saved to database');
-                this._io.emit('newCandle', candle);
+                console.log('Candle saved to database')
+                this._io.emit(process.env.SOCKET_EVENT_NAME, candle)
+                console.log('New candle emited by web socket')
             });
 
             console.log('Candle consumer stated');

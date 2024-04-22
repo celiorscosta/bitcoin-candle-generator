@@ -6,20 +6,18 @@ export default class Candle {
     open: number;
     close: number;
     color: CandleColor;
-    initialDateTime: Date;
     finalDateTime: Date;
     values: number[];
     currency: string;
 
     constructor(currency: string, initialDateTime: Date) {
-        this.currency = currency;
-        this.initialDateTime = initialDateTime;
-        this.low = Infinity;
-        this.high = 0;
-        this.open = 0;
-        this.close = 0;
-        this.color = CandleColor.UNDETERMINED;
-        this.values = [];
+        this.currency = currency
+        this.low = Infinity
+        this.high = 0
+        this.close = 0
+        this.open = 0
+        this.values = []
+        this.color = CandleColor.UNDETERMINED
     }
 
     addValue(value: number) {
