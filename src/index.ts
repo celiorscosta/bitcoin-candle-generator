@@ -36,7 +36,7 @@ const generateCandle = async () => {
             const candleObj = candle.toSimpleObject();
             console.log(candleObj);
             const candleJson = JSON.stringify(candleObj);
-            messageChannel.sendToQueue(process.env.QUEUE_NAME, Buffer.from(candleJson));
+            messageChannel.sendToQueue('candles', Buffer.from(candleJson));
             console.log('Candle Enqueued');
         }
     }
