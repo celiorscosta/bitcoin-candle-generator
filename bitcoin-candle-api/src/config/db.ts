@@ -1,7 +1,7 @@
 import { config } from 'dotenv'
 import { connect } from 'mongoose'
 
-export const connectDB = async () => {
+export const connectToMongoDB = async () => {
     config()
     try {
         await connect("mongodb://localhost/candles")
