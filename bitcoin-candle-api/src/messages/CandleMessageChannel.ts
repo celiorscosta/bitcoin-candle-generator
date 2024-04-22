@@ -1,8 +1,9 @@
 import { config } from 'dotenv'
-import { Channel } from 'amqplib'
+import { Channel, connect } from 'amqplib'
 import CandleController from 'src/controllers/CandleController';
 import { Server } from 'socket.io';
 import * as http from 'http';
+import { ICandle } from 'src/models/CandleModel';
 
 config()
 
@@ -19,5 +20,34 @@ export default class CandleMessageChannel {
                 methods: ['GET', 'POST']
             }
         });
+        this._io.on('connection', () => console.log('Websocket connected'));
+        this._createMessageChannel();
+    }
+
+    private async _createMessageChannel() {
+        try {
+            const connection = await connect('amqp://admin@admin@localhost:5672');
+            this._channel = await connection.createChannel();
+            this._channel.assertQueue('candles');
+        } catch (error) {
+            console.log('Connection to RabbitMQ failed');
+            console.log(error);
+
+        }
+    }
+
+    async consumeMessages() {
+        this._channel.consume('candles', async msg => {
+            const candleObj = JSON.parse(msg.content.toString());
+            console.log('Received candle:', candleObj);
+            this._channel.ack(msg);
+
+            const candle: ICandle = candleObj;
+            await this._candleCtrl.save(candle);
+            console.log('Candle saved to database');
+            this._io.emit('newCandle', candle);
+        });
+
+        console.log('Candle consumer stated');
     }
 }
