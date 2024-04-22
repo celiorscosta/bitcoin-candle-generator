@@ -3,7 +3,7 @@ import { Channel, connect } from 'amqplib'
 import CandleController from 'src/controllers/CandleController';
 import { Server } from 'socket.io';
 import * as http from 'http';
-import { ICandle } from 'src/models/CandleModel';
+import { ICandle } from '../models/CandleModel';
 
 config()
 
