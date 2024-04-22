@@ -1,6 +1,6 @@
 import { config } from 'dotenv'
 import { Channel, connect } from 'amqplib'
-import CandleController from 'src/controllers/CandleController';
+import CandleController from '../controllers/CandleController';
 import { Server } from 'socket.io';
 import * as http from 'http';
 import { ICandle } from '../models/CandleModel';
@@ -21,7 +21,7 @@ export default class CandleMessageChannel {
             }
         });
         this._io.on('connection', () => console.log('Websocket connected'));
-        this._createMessageChannel();
+
     }
 
     private async _createMessageChannel() {
@@ -37,17 +37,20 @@ export default class CandleMessageChannel {
     }
 
     async consumeMessages() {
-        this._channel.consume('candles', async msg => {
-            const candleObj = JSON.parse(msg.content.toString());
-            console.log('Received candle:', candleObj);
-            this._channel.ack(msg);
+        await this._createMessageChannel();
+        if (this._channel) {
+            this._channel.consume('candles', async msg => {
+                const candleObj = JSON.parse(msg.content.toString());
+                console.log('Received candle:', candleObj);
+                this._channel.ack(msg);
 
-            const candle: ICandle = candleObj;
-            await this._candleCtrl.save(candle);
-            console.log('Candle saved to database');
-            this._io.emit('newCandle', candle);
-        });
+                const candle: ICandle = candleObj;
+                await this._candleCtrl.save(candle);
+                console.log('Candle saved to database');
+                this._io.emit('newCandle', candle);
+            });
 
-        console.log('Candle consumer stated');
+            console.log('Candle consumer stated');
+        }
     }
 }

@@ -4,8 +4,6 @@ import { app } from './app';
 import { connectToMongoDB } from './config/db';
 import CandleMessageChannel from './messages/CandleMessageChannel';
 
-
-
 const createServer = async () => {
     config();
     await connectToMongoDB();

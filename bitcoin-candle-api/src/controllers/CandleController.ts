@@ -1,4 +1,4 @@
-import { ICandle, CandleModel } from "src/models/CandleModel";
+import { ICandle, CandleModel } from "../models/CandleModel";
 
 export default class CandleController {
     async save(candle: ICandle): Promise<ICandle> {
