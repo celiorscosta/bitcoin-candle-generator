@@ -10,7 +10,7 @@ export default class Candle {
     values: number[];
     currency: string;
 
-    constructor(currency: string, initialDateTime: Date) {
+    constructor(currency: string) {
         this.currency = currency
         this.low = Infinity
         this.high = 0

@@ -19,7 +19,7 @@ const generateCandle = async () => {
     if (messageChannel) {
         while (true) {
             const loopTimes = Period.THIRTY_SECONDS / Period.TEN_SECONDS;
-            const candle = new Candle('BTC', new Date());
+            const candle = new Candle('BTC');
 
             console.log('------------------------------------------------------');
             console.log('New candle created');
